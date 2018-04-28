@@ -1,20 +1,23 @@
+/*:::::::::::: REQUIRE :::::::::*/
 require("dotenv").config();
 var keys = require("./keys.js");
 var request = require("request");
+var Twitter = require('twitter');
+var Spotify = require('node-spotify-api');
+
+/*:::::::::::: INPUT VARIABLES :::::::::*/
 var inputString = process.argv;
-// Parses the command line argument to capture the "operand" (add, subtract, multiply, etc) and the numbers
 var serviceInput = inputString[2];
 var actionInput = inputString[3];
-//console.log(keys);
 
-// console.log(keys.twitter);
-// console.log(keys.spotify);
-// var client = new Twitter(keys.twitter);
-//  //console.log(spotify);
-//  console.log(client);
+/*:::::::::::: GLOBAL VARIABLES :::::::::*/
+var spotify = new Spotify(keys.spotify);
+var client = new Twitter(keys.twitter);
+
+//switch between functions 
 switch (serviceInput) {
     case 'movieThis':
-        if (1 === 1) {
+        if (actionInput != undefined) {
             movieThis(actionInput);
         } else {
             defaultMovie();
@@ -24,7 +27,7 @@ switch (serviceInput) {
         myTweets();
         break;
     case 'spotifyThisSong':
-        if (1 === 1) {
+        if (actionInput != undefined) {
             spotifyThisSong(actionInput);
         } else {
             defaultSong();
@@ -40,8 +43,8 @@ switch (serviceInput) {
 
 function myTweets() {
     console.log('in ' + serviceInput);
-    var Twitter = require('twitter');
-    var client = new Twitter(keys.twitter);
+
+ 
     var params = {
         // screen_name: 'codemedia360'  this one has the 20 listings if you want to check
         screen_name: 'groupBRCA'
@@ -66,8 +69,6 @@ function myTweets() {
 
 function spotifyThisSong(sInput) {
     console.log('in ' + serviceInput);
-    var Spotify = require('node-spotify-api');
-    var spotify = new Spotify(keys.spotify);
     spotify.search({
         type: 'track',
         query: sInput,
@@ -127,15 +128,12 @@ function movieThis(movie) {
             console.log('-------------------------------------------------');
             console.log("The movie's plot: " + JSON.parse(body).Plot);
             console.log('-------------------------------------------------');
-
             console.log("The movie's actors: " + JSON.parse(body).Actors);
             console.log('-------------------------------------------------');
-
         } else {
             console.log('else');
         }
     });
-
 }
 
 function defaultMovie() {
@@ -147,5 +145,4 @@ function defaultMovie() {
 function defaultSong() {
     var song = 'The Sign';
     spotifyThisSong(song);
-
 }
