@@ -4,6 +4,7 @@ var keys = require("./keys.js");
 var request = require("request");
 var Twitter = require('twitter');
 var Spotify = require('node-spotify-api');
+var fs = require("fs");
 
 /*:::::::::::: INPUT VARIABLES :::::::::*/
 var inputString = process.argv;
@@ -43,8 +44,6 @@ switch (serviceInput) {
 
 function myTweets() {
     console.log('in ' + serviceInput);
-
- 
     var params = {
         // screen_name: 'codemedia360'  this one has the 20 listings if you want to check
         screen_name: 'groupBRCA'
@@ -60,12 +59,20 @@ function myTweets() {
                 console.log('Twitter Post Created At: ' + dataPoint.created_at);
                 console.log('Twitter Post Headline: ' + dataPoint.text);
                 console.log('-------------------------------------------------');
-            }
+       
+            var tData = '-------------------------------------------------' + 
+            '\nTwitter Username: ' + dataPoint.user.name + 
+            '\nTwitter Post Created At: ' + dataPoint.created_at +
+            '\nTwitter Post Headline: ' + dataPoint.text +
+            '\n-------------------------------------------------'
+            ; 
+    
+            var flName = 'tLog';
+            genDataFile(flName, tData);
+        }
         }
     });
 }
-
-
 
 function spotifyThisSong(sInput) {
     console.log('in ' + serviceInput);
@@ -89,11 +96,24 @@ function spotifyThisSong(sInput) {
                 var value = a.name;
             }
             console.log('Track Author: ' + value);
-            console.log('Album: ' + dataPoint.album.name)
+            console.log('Album: ' + dataPoint.album.name);
             console.log('Track Release Date: ' + dataPoint.album.release_date);
             console.log('Track Link: ' + dataPoint.preview_url);
             console.log('-------------------------------------------------');
-        }
+      
+
+        var sData = '-------------------------------------------------' + 
+        '\nTrack Name: ' + dataPoint.name + 
+        '\nTrack Popularity: ' + dataPoint.popularity +
+        '\nTrack Author: ' + value + 
+        '\nAlbum: ' + dataPoint.album.name + 
+        '\nTrack Release Date: ' + dataPoint.album.release_date + 
+        '\nTrack Link: ' + dataPoint.preview_url + 
+        '\n-------------------------------------------------'; 
+
+        var flName = 'sLog';
+        genDataFile(flName, sData);
+    }
     });
 }
 
@@ -130,6 +150,21 @@ function movieThis(movie) {
             console.log('-------------------------------------------------');
             console.log("The movie's actors: " + JSON.parse(body).Actors);
             console.log('-------------------------------------------------');
+
+            var mData = '-------------------------------------------------\n' +
+                "The movie's Rotten Tomatoes rating is: " + JSON.parse(body).Title +
+                "\nThe movie's was released on: " + JSON.parse(body).Released +
+                "\nThe movie's IMDB rating is: " + JSON.parse(body).imdbRating +
+                "\nThe movie's Rotten Tomatoes rating is: " + value + 
+                "\nCountry where the movie was produced: " + JSON.parse(body).Country +
+                "\nLanguage of the movie: " + JSON.parse(body).Language + 
+                '\n-------------------------------------------------' +
+                "\nThe movie's plot: " + JSON.parse(body).Plot + 
+                "\nThe movie's actors: " + JSON.parse(body).Actors + 
+                '\n-------------------------------------------------';
+                var flName = 'mLog';
+                genDataFile(flName, mData);
+
         } else {
             console.log('else');
         }
@@ -145,4 +180,20 @@ function defaultMovie() {
 function defaultSong() {
     var song = 'The Sign';
     spotifyThisSong(song);
+}
+
+function genDataFile(flName, data) {
+    fs.appendFile( "logs/" + flName + ".txt", data, function (err) {
+
+        // If the code experiences any errors it will log the error to the console.
+        if (err) {
+            console.log(err);
+            return;
+        }
+
+        // Otherwise, it will print: "movies.txt was updated!"
+        console.log(flName + ".txt was updated!");
+
+    });
+
 }

@@ -1,0 +1,11 @@
+-------------------------------------------------
+The movie's Rotten Tomatoes rating is: 13 Going on 30
+The movie's was released on: 23 Apr 2004
+The movie's IMDB rating is: 6.1
+The movie's Rotten Tomatoes rating is: 64%
+Country where the movie was produced: USA
+Language of the movie: English, Portuguese
+-------------------------------------------------
+The movie's plot: A girl makes a wish on her thirteenth birthday, and wakes up the next day as a thirty-year-old woman.
+The movie's actors: Jennifer Garner, Mark Ruffalo, Judy Greer, Andy Serkis
+-------------------------------------------------
